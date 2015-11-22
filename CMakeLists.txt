@@ -155,6 +155,7 @@ add_definitions(-DFT2_BUILD_LIBRARY)
 #find_package(PNG)
 #find_package(HarfBuzz)
 
+include_directories(${ZLIB_INCLUDE_DIR})
 
 message(STATUS
   "Creating directory ${PROJECT_BINARY_DIR}/include/freetype/config")
@@ -205,11 +206,10 @@ message(STATUS
 
 file(READ "${PROJECT_SOURCE_DIR}/include/freetype/config/ftoption.h"
   FTOPTION_H)
-if (ZLIB_FOUND)
-  string(REGEX REPLACE
+# Force "system" zlib to share Athena's
+string(REGEX REPLACE
     "/\\* +(#define +FT_CONFIG_OPTION_SYSTEM_ZLIB) +\\*/" "\\1"
     FTOPTION_H "${FTOPTION_H}")
-endif ()
 if (BZIP2_FOUND)
   string(REGEX REPLACE
     "/\\* +(#define +FT_CONFIG_OPTION_USE_BZIP2) +\\*/" "\\1"
