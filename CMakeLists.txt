@@ -127,14 +127,14 @@ endif ()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/builds)
 
 
-if (BUILD_FRAMEWORK)
-  if (NOT "${CMAKE_GENERATOR}" STREQUAL "Xcode")
-    message(FATAL_ERROR
-      "You should use Xcode generator with BUILD_FRAMEWORK enabled")
-  endif ()
-  set(CMAKE_OSX_ARCHITECTURES "$(ARCHS_STANDARD_32_64_BIT)")
-  set(BUILD_SHARED_LIBS ON)
-endif ()
+#if (BUILD_FRAMEWORK)
+#  if (NOT "${CMAKE_GENERATOR}" STREQUAL "Xcode")
+#    message(FATAL_ERROR
+#      "You should use Xcode generator with BUILD_FRAMEWORK enabled")
+#  endif ()
+#  set(CMAKE_OSX_ARCHITECTURES "$(ARCHS_STANDARD_32_64_BIT)")
+#  set(BUILD_SHARED_LIBS ON)
+#endif ()
 
 
 set(VERSION_MAJOR "2")
@@ -150,10 +150,10 @@ add_definitions(-DFT2_BUILD_LIBRARY)
 
 
 # Find dependencies
-find_package(ZLIB)
-find_package(BZip2)
-find_package(PNG)
-find_package(HarfBuzz)
+#find_package(ZLIB)
+#find_package(BZip2)
+#find_package(PNG)
+#find_package(HarfBuzz)
 
 
 message(STATUS
@@ -292,12 +292,12 @@ else ()
 endif ()
 
 
-if (BUILD_FRAMEWORK)
-  set(BASE_SRCS
-    ${BASE_SRCS}
-    builds/mac/freetype-Info.plist
-  )
-endif ()
+#if (BUILD_FRAMEWORK)
+#  set(BASE_SRCS
+#    ${BASE_SRCS}
+#    builds/mac/freetype-Info.plist
+#  )
+#endif ()
 
 
 add_library(freetype
@@ -308,91 +308,91 @@ add_library(freetype
 )
 
 
-if (BUILD_SHARED_LIBS)
-  set_target_properties(freetype PROPERTIES
-    VERSION ${PROJECT_VERSION}
-    SOVERSION ${SHARED_LIBRARY_VERSION}
-    COMPILE_DEFINITIONS freetype_EXPORTS
-  )
-endif ()
+#if (BUILD_SHARED_LIBS)
+#  set_target_properties(freetype PROPERTIES
+#    VERSION ${PROJECT_VERSION}
+#    SOVERSION ${SHARED_LIBRARY_VERSION}
+#    COMPILE_DEFINITIONS freetype_EXPORTS
+#  )
+#endif ()
 
 
-if (BUILD_FRAMEWORK)
-  set_property(SOURCE ${PUBLIC_CONFIG_HEADERS}
-    PROPERTY MACOSX_PACKAGE_LOCATION Headers/config
-  )
-  set_target_properties(freetype PROPERTIES
-    FRAMEWORK TRUE
-    MACOSX_FRAMEWORK_INFO_PLIST builds/mac/freetype-Info.plist
-    PUBLIC_HEADER "${PUBLIC_HEADERS}"
-    XCODE_ATTRIBUTE_INSTALL_PATH "@rpath"
-  )
-endif ()
+#if (BUILD_FRAMEWORK)
+#  set_property(SOURCE ${PUBLIC_CONFIG_HEADERS}
+#    PROPERTY MACOSX_PACKAGE_LOCATION Headers/config
+#  )
+#  set_target_properties(freetype PROPERTIES
+#    FRAMEWORK TRUE
+#    MACOSX_FRAMEWORK_INFO_PLIST builds/mac/freetype-Info.plist
+#    PUBLIC_HEADER "${PUBLIC_HEADERS}"
+#    XCODE_ATTRIBUTE_INSTALL_PATH "@rpath"
+#  )
+#endif ()
 
 
-if (ZLIB_FOUND)
-  target_link_libraries(freetype ${ZLIB_LIBRARIES})
-  include_directories(${ZLIB_INCLUDE_DIRS})
-endif ()
-if (BZIP2_FOUND)
-  target_link_libraries(freetype ${BZIP2_LIBRARIES})
-  include_directories(${BZIP2_INCLUDE_DIR}) # not BZIP2_INCLUDE_DIRS
-endif ()
-if (PNG_FOUND)
-  add_definitions(${PNG_DEFINITIONS})
-  target_link_libraries(freetype ${PNG_LIBRARIES})
-  include_directories(${PNG_INCLUDE_DIRS})
-endif ()
-if (HARFBUZZ_FOUND)
-  target_link_libraries(freetype ${HARFBUZZ_LIBRARIES})
-  include_directories(${HARFBUZZ_INCLUDE_DIRS})
-endif ()
+#if (ZLIB_FOUND)
+#  target_link_libraries(freetype ${ZLIB_LIBRARIES})
+#  include_directories(${ZLIB_INCLUDE_DIRS})
+#endif ()
+#if (BZIP2_FOUND)
+#  target_link_libraries(freetype ${BZIP2_LIBRARIES})
+#  include_directories(${BZIP2_INCLUDE_DIR}) # not BZIP2_INCLUDE_DIRS
+#endif ()
+#if (PNG_FOUND)
+#  add_definitions(${PNG_DEFINITIONS})
+#  target_link_libraries(freetype ${PNG_LIBRARIES})
+#  include_directories(${PNG_INCLUDE_DIRS})
+#endif ()
+#if (HARFBUZZ_FOUND)
+#  target_link_libraries(freetype ${HARFBUZZ_LIBRARIES})
+#  include_directories(${HARFBUZZ_INCLUDE_DIRS})
+#endif ()
 
 
 # Installations
 # Note the trailing slash in the argument to the `DIRECTORY' directive
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
-  DESTINATION include/freetype2
-  PATTERN "internal" EXCLUDE
-  PATTERN "ftconfig.h" EXCLUDE
-  PATTERN "ftoption.h" EXCLUDE
-)
-install(FILES
-  ${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h
-  ${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h
-  DESTINATION include/freetype2/freetype/config
-)
-install(TARGETS freetype
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  FRAMEWORK DESTINATION Library/Frameworks
-)
+#install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
+#  DESTINATION include/freetype2
+#  PATTERN "internal" EXCLUDE
+#  PATTERN "ftconfig.h" EXCLUDE
+#  PATTERN "ftoption.h" EXCLUDE
+#)
+#install(FILES
+#  ${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h
+#  ${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h
+#  DESTINATION include/freetype2/freetype/config
+#)
+#install(TARGETS freetype
+#  RUNTIME DESTINATION bin
+#  LIBRARY DESTINATION lib
+#  ARCHIVE DESTINATION lib
+#  FRAMEWORK DESTINATION Library/Frameworks
+#)
 
 
 # Packaging
 # CPack version numbers for release tarball name.
-set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH}})
-if (NOT DEFINED CPACK_PACKAGE_DESCRIPTION_SUMMARY)
-  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CMAKE_PROJECT_NAME}")
-endif ()
-if (NOT DEFINED CPACK_SOURCE_PACKAGE_FILE_NAME)
-  set(CPACK_SOURCE_PACKAGE_FILE_NAME
-    "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}-r${PROJECT_REV}"
-    CACHE INTERNAL "tarball basename"
-  )
-endif ()
-set(CPACK_SOURCE_GENERATOR TGZ)
-set(CPACK_SOURCE_IGNORE_FILES
-  "/CVS/;/.svn/;.swp$;.#;/#;/build/;/serial/;/ser/;/parallel/;/par/;~;/preconfig.out;/autom4te.cache/;/.config")
-set(CPACK_GENERATOR TGZ)
-include(CPack)
+#set(CPACK_PACKAGE_VERSION_MAJOR ${VERSION_MAJOR})
+#set(CPACK_PACKAGE_VERSION_MINOR ${VERSION_MINOR})
+#set(CPACK_PACKAGE_VERSION_PATCH ${VERSION_PATCH}})
+#if (NOT DEFINED CPACK_PACKAGE_DESCRIPTION_SUMMARY)
+#  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CMAKE_PROJECT_NAME}")
+#endif ()
+#if (NOT DEFINED CPACK_SOURCE_PACKAGE_FILE_NAME)
+#  set(CPACK_SOURCE_PACKAGE_FILE_NAME
+#    "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION}-r${PROJECT_REV}"
+#    CACHE INTERNAL "tarball basename"
+#  )
+#endif ()
+#set(CPACK_SOURCE_GENERATOR TGZ)
+#set(CPACK_SOURCE_IGNORE_FILES
+#  "/CVS/;/.svn/;.swp$;.#;/#;/build/;/serial/;/ser/;/parallel/;/par/;~;/preconfig.out;/autom4te.cache/;/.config")
+#set(CPACK_GENERATOR TGZ)
+#include(CPack)
 
 
 # add make dist target
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+#add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
 
 # eof
