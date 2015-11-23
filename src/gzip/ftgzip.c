@@ -659,7 +659,7 @@
       FT_ULong  zip_size = ft_gzip_get_uncompressed_size( source );
 
 
-      if ( zip_size != 0 && zip_size < 40 * 1024 )
+      if ( zip_size != 0 && zip_size < 10 * 1024 * 1024 )
       {
         FT_Byte*  zip_buff = NULL;
 

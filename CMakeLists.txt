@@ -201,32 +201,31 @@ endif ()
 
 
 # Create the options file
-message(STATUS
-  "Creating file ${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h")
+#message(STATUS
+#  "Creating file ${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h")
 
-file(READ "${PROJECT_SOURCE_DIR}/include/freetype/config/ftoption.h"
-  FTOPTION_H)
-# Force "system" zlib to share Athena's
-string(REGEX REPLACE
-    "/\\* +(#define +FT_CONFIG_OPTION_SYSTEM_ZLIB) +\\*/" "\\1"
-    FTOPTION_H "${FTOPTION_H}")
-if (BZIP2_FOUND)
-  string(REGEX REPLACE
-    "/\\* +(#define +FT_CONFIG_OPTION_USE_BZIP2) +\\*/" "\\1"
-    FTOPTION_H "${FTOPTION_H}")
-endif ()
-if (PNG_FOUND)
-  string(REGEX REPLACE
-    "/\\* +(#define +FT_CONFIG_OPTION_USE_PNG) +\\*/" "\\1"
-    FTOPTION_H "${FTOPTION_H}")
-endif ()
-if (HARFBUZZ_FOUND)
-  string(REGEX REPLACE
-    "/\\* +(#define +FT_CONFIG_OPTION_USE_HARFBUZZ) +\\*/" "\\1"
-    FTOPTION_H "${FTOPTION_H}")
-endif ()
-file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h"
-  "${FTOPTION_H}")
+#file(READ "${PROJECT_SOURCE_DIR}/include/freetype/config/ftoption.h"
+#  FTOPTION_H)
+#string(REGEX REPLACE
+#    "/\\* +(#define +FT_CONFIG_OPTION_SYSTEM_ZLIB) +\\*/" "\\1"
+#    FTOPTION_H "${FTOPTION_H}")
+#if (BZIP2_FOUND)
+#  string(REGEX REPLACE
+#    "/\\* +(#define +FT_CONFIG_OPTION_USE_BZIP2) +\\*/" "\\1"
+#    FTOPTION_H "${FTOPTION_H}")
+#endif ()
+#if (PNG_FOUND)
+#  string(REGEX REPLACE
+#    "/\\* +(#define +FT_CONFIG_OPTION_USE_PNG) +\\*/" "\\1"
+#    FTOPTION_H "${FTOPTION_H}")
+#endif ()
+#if (HARFBUZZ_FOUND)
+#  string(REGEX REPLACE
+#    "/\\* +(#define +FT_CONFIG_OPTION_USE_HARFBUZZ) +\\*/" "\\1"
+#    FTOPTION_H "${FTOPTION_H}")
+#endif ()
+#file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftoption.h"
+#  "${FTOPTION_H}")
 
 
 # Specify library include directories
