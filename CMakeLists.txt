@@ -3,6 +3,9 @@
 # Copyright 2013-2015 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
+# Heavily modified for integration within specter;
+# static dependency caching now possible
+#
 # Written originally by John Cary <cary@txcorp.com>
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -60,7 +63,7 @@
 #   developer team.
 
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
 
 
 include(CheckIncludeFile)
@@ -166,38 +169,38 @@ file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/include/freetype/config")
 message(STATUS
   "Creating file ${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h")
 
-if (UNIX)
-  check_include_file("unistd.h" HAVE_UNISTD_H)
-  check_include_file("fcntl.h" HAVE_FCNTL_H)
-  check_include_file("stdint.h" HAVE_STDINT_H)
-
-  file(READ "${PROJECT_SOURCE_DIR}/builds/unix/ftconfig.in"
-    FTCONFIG_H)
-  if (HAVE_UNISTD_H)
-    string(REGEX REPLACE
-      "#undef +(HAVE_UNISTD_H)" "#define \\1"
-      FTCONFIG_H "${FTCONFIG_H}")
-  endif ()
-  if (HAVE_FCNTL_H)
-    string(REGEX REPLACE
-      "#undef +(HAVE_FCNTL_H)" "#define \\1"
-      FTCONFIG_H "${FTCONFIG_H}")
-  endif ()
-  if (HAVE_STDINT_H)
-    string(REGEX REPLACE
-      "#undef +(HAVE_STDINT_H)" "#define \\1"
-      FTCONFIG_H "${FTCONFIG_H}")
-  endif ()
-  string(REPLACE "/undef " "#undef "
-    FTCONFIG_H "${FTCONFIG_H}")
-  file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h"
-    "${FTCONFIG_H}")
-else ()
-  file(READ "${PROJECT_SOURCE_DIR}/include/freetype/config/ftconfig.h"
-    FTCONFIG_H)
-  file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h"
-    "${FTCONFIG_H}")
-endif ()
+#if (UNIX)
+#  check_include_file("unistd.h" HAVE_UNISTD_H)
+#  check_include_file("fcntl.h" HAVE_FCNTL_H)
+#  check_include_file("stdint.h" HAVE_STDINT_H)
+#
+#  file(READ "${PROJECT_SOURCE_DIR}/builds/unix/ftconfig.in"
+#    FTCONFIG_H)
+#  if (HAVE_UNISTD_H)
+#    string(REGEX REPLACE
+#      "#undef +(HAVE_UNISTD_H)" "#define \\1"
+#      FTCONFIG_H "${FTCONFIG_H}")
+#  endif ()
+#  if (HAVE_FCNTL_H)
+#    string(REGEX REPLACE
+#      "#undef +(HAVE_FCNTL_H)" "#define \\1"
+#      FTCONFIG_H "${FTCONFIG_H}")
+#  endif ()
+#  if (HAVE_STDINT_H)
+#    string(REGEX REPLACE
+#      "#undef +(HAVE_STDINT_H)" "#define \\1"
+#      FTCONFIG_H "${FTCONFIG_H}")
+#  endif ()
+#  string(REPLACE "/undef " "#undef "
+#    FTCONFIG_H "${FTCONFIG_H}")
+#  file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h"
+#    "${FTCONFIG_H}")
+#else ()
+#  file(READ "${PROJECT_SOURCE_DIR}/include/freetype/config/ftconfig.h"
+#    FTCONFIG_H)
+#  file(WRITE "${PROJECT_BINARY_DIR}/include/freetype/config/ftconfig.h"
+#    "${FTCONFIG_H}")
+#endif ()
 
 
 # Create the options file
@@ -230,7 +233,6 @@ endif ()
 
 # Specify library include directories
 include_directories("${PROJECT_SOURCE_DIR}/include")
-include_directories(BEFORE "${PROJECT_BINARY_DIR}/include")
 
 
 file(GLOB PUBLIC_HEADERS "include/ft2build.h" "include/freetype/*.h")
